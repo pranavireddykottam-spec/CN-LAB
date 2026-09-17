@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char data[100], stuffed[200];
+    char flag, esc;
+    int i, j = 0;
+
+    printf("Enter the data: ");
+    scanf("%s", data);
+
+    printf("Enter the Flag character: ");
+    scanf(" %c", &flag);
+
+    printf("Enter the Escape character: ");
+    scanf(" %c", &esc);
+
+    stuffed[j++] = flag;   // Starting flag
+
+    for (i = 0; i < strlen(data); i++) {
+        if (data[i] == flag || data[i] == esc) {
+            stuffed[j++] = esc;  // Add escape character
+        }
+        stuffed[j++] = data[i];
+    }
+
+    stuffed[j++] = flag;   // Ending flag
+    stuffed[j] = '\0';
+
+    printf("\nOriginal Data  : %s", data);
+    printf("\nStuffed Data   : %s\n", stuffed);
+
+    return 0;
+}
