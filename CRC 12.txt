@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+
+void crc(char data[], int len, unsigned int poly, int crc_bits) {
+    unsigned int crc = 0;
+    int i, j;
+
+    for (i = 0; i < len; i++) {
+        crc ^= (unsigned int)data[i] << (crc_bits - 8);
+
+        for (j = 0; j < 8; j++) {
+            if (crc & (1 << (crc_bits - 1)))
+                crc = (crc << 1) ^ poly;
+            else
+                crc <<= 1;
+
+            crc &= (1 << crc_bits) - 1;
+        }
+    }
+
+    printf("CRC-%d = %X\n", crc_bits, crc);
+}
+
+int main() {
+    char data[100];
+    int len;
+
+    printf("Enter the data: ");
+    scanf("%s", data);
+
+    len = strlen(data);
+
+    printf("\nInput Data: %s\n\n", data);
+
+    /* CRC-12 polynomial: x^12 + x^11 + x^3 + x^2 + x + 1 */
+    crc(data, len, 0x80F, 12);
+
+    /* CRC-16 polynomial: x^16 + x^15 + x^2 + 1 */
+    crc(data, len, 0x8005, 16);
+
+    /* CRC-CCITT polynomial: x^16 + x^12 + x^5 + 1 */
+    crc(data, len, 0x1021, 16);
+
+    return 0;
+}
